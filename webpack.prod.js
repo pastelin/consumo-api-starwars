@@ -31,10 +31,10 @@ module.exports = {
         test: /styles.css$/,
         use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
-      {
-        test: /\.(png|jpe?g|gif)$/,
-        loader: 'file-loader'
-      },
+      // {
+      //   test: /\.(png|jpe?g|gif)$/,
+      //   loader: 'file-loader'
+      // },
       {
         test: /\.m?js$/,
         exclude: /node_modules/,
@@ -68,12 +68,12 @@ module.exports = {
       ignoreOrder: false
     }),
 
-    new CopyPlugin({
-      patterns: [
-        {
-        from: 'src/assets/', to:'assets/'
-        }
-      ]
-    })
+    // new CopyPlugin({
+    //   patterns: [
+    //     {
+    //     from: 'src/assets/', to:'assets/'
+    //     }
+    //   ]
+    // })
   ]
 }

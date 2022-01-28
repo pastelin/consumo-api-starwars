@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "webpack --config webpack.config.js",
     "build": "webpack --config webpack.prod.js",
-    "serve": "webpack serve --config webpack.config.js --open --port=8081"
+    "start": "webpack serve --config webpack.config.js --open --port=8081"
   },
   "author": "Juan Pastelin Brioso",
   "license": "ISC",

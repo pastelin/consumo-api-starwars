@@ -1,6 +1,5 @@
-import { saludar } from './js/componentes';
-import './styles.css';
+import './css/styles.css';
+import { init } from './js/componente-nombre-persona';
 
-const nombre = 'Juan';
 
-saludar(nombre);
+init();
