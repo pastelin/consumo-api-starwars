@@ -1,13 +1,17 @@
-import { obtenerPersonasLista } from './http-provider';
+import { obtenerDatosPersonal } from './http-provider';
 import { PersonasLista } from '../classes/personas-lista.class';
 import { initOpcionesPersona } from './componente-opcion-persona';
 
 // Referencias al HTML
 const btnNombres = document.querySelector('#btnNombres');
 const btnNombresDropdown = document.querySelector('#btnNombresDropdown');
+const idNext = document.querySelector('#next');
+const idPrevious = document.querySelector('#previous');
 
 let personasLista;
 let datosPersona;
+
+let numeroPagina = 1;
 
 const crearBtnNombresHtml = (nombre) => {
 	const html = `
@@ -29,32 +33,74 @@ const crearBtnNombresHtml = (nombre) => {
 };
 
 const dibujarBtnNombres = async () => {
+	btnNombres.innerHTML = '';
+	btnNombresDropdown.innerHTML = '';
+
 	const nombres = personasLista.obtenerListaNombres();
 	nombres.map(crearBtnNombresHtml);
 };
 
 const nuevaInstanciaPeopleList = async () => {
-	personasLista = new PersonasLista(await obtenerPersonasLista());
+	personasLista = new PersonasLista(await obtenerDatosPersonal(numeroPagina));
 };
 
 const eventos = () => {
 	btnNombres.addEventListener('click', (event) => {
 		const filtro = event.target.tagName;
-		const activoIzquierdo = document.querySelector('.activo-izquierdo');
+		const tieneClassActivo = document.querySelector('.activo');
 
+		// Al usar la delegacion de eventos se valida que solo se haya dado clic a elementos de tipo button y no al contenedor principal
 		if (filtro === 'BUTTON') {
 			const personaSeleccionada = event.target.textContent;
 
-			if (activoIzquierdo && activoIzquierdo != null) {
-				activoIzquierdo.classList.remove('activo-izquierdo');
+			if (tieneClassActivo && tieneClassActivo != null) {
+				tieneClassActivo.classList.remove('activo');
 			}
 
-			event.target.classList.add('activo-izquierdo');
+			event.target.classList.add('activo');
 			datosPersona = personasLista.buscarPorNombre(personaSeleccionada);
 
 			initOpcionesPersona(datosPersona);
 		}
 	});
+
+	btnNombresDropdown.addEventListener('click', (event) => {
+		const filtro = event.target.tagName;
+		const tieneClassActive = document.querySelector('.active');
+
+		if(filtro === 'A') {
+			const personaSeleccionada = event.target.textContent;
+
+			if(tieneClassActive && tieneClassActive != null) {
+				tieneClassActive.classList.remove('active');
+			}
+
+			event.target.classList.add('active');
+			datosPersona = personasLista.buscarPorNombre(personaSeleccionada);
+
+			initOpcionesPersona(datosPersona);
+		}
+
+	});
+
+	idNext.addEventListener('click', async() => {
+		if(numeroPagina <= 8) {
+			numeroPagina++;
+			await nuevaInstanciaPeopleList();
+			dibujarBtnNombres();
+			initOpcionesPersona();
+		}
+	});
+
+	idPrevious.addEventListener('click', async() => {
+		if(numeroPagina > 1) {
+			numeroPagina--;
+			await nuevaInstanciaPeopleList();
+			dibujarBtnNombres();
+			initOpcionesPersona();
+		}
+	});
+
 };
 
 export const init = async () => {
@@ -66,7 +112,7 @@ export const init = async () => {
 	
 	eventos();
 
-	initOpcionesPersona({name: 'Por implementar'});
+	initOpcionesPersona();
 	
 	console.timeEnd('23');
 };

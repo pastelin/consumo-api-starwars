@@ -13,5 +13,4 @@ export class PersonasLista {
         const datos = this.personasLista.filter( (persona) => persona.name == nombre );
         return datos[0];
     }
-
 }
